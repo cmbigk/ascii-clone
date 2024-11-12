@@ -8,7 +8,6 @@ import (
 
 var fmtPrint = fmt.Print
 
-// Helper function to simulate PrintASCII output
 func captureOutput(asciiMap map[rune][]string, text string) string {
 	var builder strings.Builder
 	// Override fmt.Print to write to builder
@@ -18,9 +17,14 @@ func captureOutput(asciiMap map[rune][]string, text string) string {
 		return fmt.Fprintf(&builder, "%v", args...)
 	}
 
+	// Handle escape sequences in the input text
+	text = strings.ReplaceAll(text, "\\n", "\n")
+
 	// Call the PrintASCII function and capture output
 	PrintASCII(asciiMap, text)
-	return builder.String()
+
+	// Normalize line endings to \n for consistency
+	return strings.ReplaceAll(builder.String(), "\r\n", "\n")
 }
 
 func TestASCIIArt(t *testing.T) {
@@ -90,7 +94,10 @@ func TestASCIIArt(t *testing.T) {
 
 			// Compare the result with the expected output
 			if output != tc.want {
-				t.Errorf("For input %s, expected output:\n%s\nbut got:\n%s", tc.input, tc.want, output)
+				if output != tc.want {
+					t.Errorf("For input %s,\nExpected output:\n`%s`\nBut got:\n`%s`", tc.input, tc.want, output)
+				}
+
 			}
 		})
 	}
