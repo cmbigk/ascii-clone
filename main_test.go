@@ -8,6 +8,7 @@ import (
 
 var fmtPrint = fmt.Print
 
+// captureOutput captures the output of PrintASCII
 func captureOutput(asciiMap map[rune][]string, text string) string {
 	var builder strings.Builder
 	// Override fmt.Print to write to builder
@@ -27,33 +28,38 @@ func captureOutput(asciiMap map[rune][]string, text string) string {
 	return strings.ReplaceAll(builder.String(), "\r\n", "\n")
 }
 
+// TestASCIIArt tests the PrintASCII function
 func TestASCIIArt(t *testing.T) {
 	testCases := []struct {
 		name  string
 		input string
 		want  string
-	}{{
-		name:  "Empty Input",
-		input: "",
-		want:  ``,
-	}, {
-		name:  "Single Escape Sequence '\\n'",
-		input: "\\n",
-		want:  "\n",
-	}, {
-		name:  "Simple Hello",
-		input: "Hello",
-		want: ` _    _          _   _          
+	}{
+		{
+			name:  "Empty Input",
+			input: "",
+			want:  "",
+		},
+		{
+			name:  "Single Escape Sequence '\\n'",
+			input: "\\n",
+			want:  "\n",
+		},
+		{
+			name:  "Simple Hello",
+			input: "Hello",
+			want: ` _    _          _   _          
 | |  | |        | | | |         
 | |__| |   ___  | | | |   ___   
 |  __  |  / _ \ | | | |  / _ \  
 | |  | | |  __/ | | | | | (_) | 
 |_|  |_|  \___| |_| |_|  \___/  
                                  `,
-	}, {
-		name:  "Hello with newline",
-		input: "Hello\\nThere",
-		want: ` _    _          _   _          
+		},
+		{
+			name:  "Hello with newline",
+			input: "Hello\\nThere",
+			want: ` _    _          _   _          
 | |  | |        | | | |         
 | |__| |   ___  | | | |   ___   
 |  __  |  / _ \ | | | |  / _ \  
@@ -65,12 +71,13 @@ func TestASCIIArt(t *testing.T) {
    | |    | |__     ___   _ __    ___  
    | |    |  _ \   / _ \ | '__|  / _ \ 
    | |    | | | | |  __/ | |    |  __/ 
-   |_|    |_| |_|  \___| |_|     \___| 
+   |_|    |_| |_|  \___| |_|     \___/  
                                         `,
-	}, {
-		name:  "Quoted Input",
-		input: "{Hello There}",
-		want: `   __  _    _          _   _                 _______   _                           __    
+		},
+		{
+			name:  "Quoted Input",
+			input: "{Hello There}",
+			want: `   __  _    _          _   _                 _______   _                           __    
   / / | |  | |        | | | |               |__   __| | |                          \ \   
  | |  | |__| |   ___  | | | |   ___            | |    | |__     ___   _ __    ___   | |  
 / /   |  __  |  / _ \ | | | |  / _ \           | |    |  _ \   / _ \ | '__|  / _ \   \ \ 
@@ -78,9 +85,10 @@ func TestASCIIArt(t *testing.T) {
  | |  |_|  |_|  \___| |_| |_|  \___/           |_|    |_| |_|  \___| |_|     \___|  | |  
   \_\                                                                              /_/   
                                                                                           `,
-	}}
+		},
+	}
 
-	// Load the ASCII map from a test template
+	// Load the ASCII map from a test template (you'll need to implement LoadTemplate)
 	asciiMap, err := LoadTemplate("standard.txt")
 	if err != nil {
 		t.Fatalf("Error loading template: %v", err)
@@ -94,10 +102,7 @@ func TestASCIIArt(t *testing.T) {
 
 			// Compare the result with the expected output
 			if output != tc.want {
-				if output != tc.want {
-					t.Errorf("For input %s,\nExpected output:\n`%s`\nBut got:\n`%s`", tc.input, tc.want, output)
-				}
-
+				t.Errorf("For input %s,\nExpected output:\n`%s`\nBut got:\n`%s`", tc.input, tc.want, output)
 			}
 		})
 	}
