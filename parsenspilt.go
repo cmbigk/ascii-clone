@@ -12,9 +12,7 @@ func ParseEscapeSequences(input string) string {
 
 // SplitTextByLines splits the input text into a slice of strings based on the
 // newline character ("\n"). Each element in the resulting slice represents
-
 // one line of text, allowing us to process each line individually.
-
 func SplitTextByLines(text string) []string {
 	return strings.Split(text, "\n")
 }

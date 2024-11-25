@@ -19,7 +19,7 @@ func LoadTemplate(filePath string) (map[rune][]string, error) {
 	// slices of strings as values, where each string is a line in the ASCII art.
 	asciiMap := make(map[rune][]string)
 
-	// Use a scanner to read the file line by line.
+	// Prepares the file to be read, we dont actually start reading it yet. . it just sets up the scanner to the input source (file)
 	scanner := bufio.NewScanner(file)
 
 	// Initialize `character` to ' ', which will correspond to the ASCII art for space.
